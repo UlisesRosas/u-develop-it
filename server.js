@@ -25,7 +25,12 @@ const db = mysql.createConnection(
 // querys the database to see if we get the candidates information. combined with express route
 // Get all candidates
 app.get('/api/candidates', (req, res) => {
-    const sql = `SELECT * FROM candidates`;
+//   this query left joins the two tables
+    const sql = `SELECT candidates.*, parties.name 
+    AS party_name 
+    FROM candidates 
+    LEFT JOIN parties 
+    ON candidates.party_id = parties.id`;;
 
     db.query(sql, (err, rows) => {
         if (err) {
@@ -41,8 +46,14 @@ app.get('/api/candidates', (req, res) => {
 
 // Get a single candidate query combined with express route
 app.get('/api/candidate/:id', (req, res) => {
-    // this ? will be filled by the search in the url endpoint
-    const sql = `SELECT * FROM candidates WHERE id = ?`;
+    // this ? will be filled by the search in the url endpoint. QWhere clause goes at the end
+    const sql = `SELECT candidates.*, parties.name 
+    AS party_name 
+    FROM candidates 
+    LEFT JOIN parties 
+    ON candidates.party_id = parties.id 
+    WHERE candidates.id = ?`;
+;
     // params is an array
     const params = [req.params.id];
 
