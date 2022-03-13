@@ -1,6 +1,8 @@
 -- this schema file is creating the table for the candidates
 
 -- deletes the tables every time schema.sql file is ran
+-- the order matters
+DROP TABLE IF EXISTS votes;
 DROP TABLE IF EXISTS candidates;
 DROP TABLE IF EXISTS parties;
 DROP TABLE IF EXISTS voters;
@@ -27,4 +29,17 @@ CREATE TABLE voters (
   email VARCHAR(50) NOT NULL,
 --   this keeps track of the date and time when a voter registers
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE votes (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  voter_id INTEGER NOT NULL,
+  candidate_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+-- constraints to make voter id unique
+  CONSTRAINT uc_voter UNIQUE (voter_id),
+  -- the o delete will delete the entire row if the reference key is deleted
+  CONSTRAINT fk_voter FOREIGN KEY (voter_id) REFERENCES voters(id) ON DELETE CASCADE,
+  CONSTRAINT fk_candidate FOREIGN KEY (candidate_id) REFERENCES candidates(id) ON DELETE CASCADE
 );
