@@ -19,7 +19,10 @@ CREATE TABLE candidates (
   last_name VARCHAR(30) NOT NULL,
   party_id INTEGER,
   industry_connected BOOLEAN NOT NULL,
-  CONSTRAINT fk_party FOREIGN KEY (party_id) REFERENCES parties(id) ON DELETE SET NULL
+  CONSTRAINT fk_party
+    FOREIGN KEY (party_id)
+    REFERENCES parties(id)
+    ON DELETE SET NULL
 );
 
 CREATE TABLE voters (
@@ -39,7 +42,7 @@ CREATE TABLE votes (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 -- constraints to make voter id unique
   CONSTRAINT uc_voter UNIQUE (voter_id),
-  -- the o delete will delete the entire row if the reference key is deleted
+  -- the on delete cascade will delete the entire row if the reference key is deleted
   CONSTRAINT fk_voter FOREIGN KEY (voter_id) REFERENCES voters(id) ON DELETE CASCADE,
   CONSTRAINT fk_candidate FOREIGN KEY (candidate_id) REFERENCES candidates(id) ON DELETE CASCADE
 );
